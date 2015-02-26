@@ -1,1 +1,1 @@
-# qbPieChart2
+Makes an aster chart from a database
