@@ -106,7 +106,7 @@ socket.on('queryFor' + user, function(data){
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 	svg.call(tip);
 	var count = 0;
-	var colors = ['#BF3EFF', '#FFCC00', '#49E20E', '#CC3232', '#00CDCD', '#8968CD', '#66CD00', '#FF9900', '#336699', '#FF6600'];
+	var colors = ['#BF3EFF', '#FFCC00', '#49E20E', '#FF3030', '#00CDCD', '#8968CD', '#66CD00', '#FF9900', '#009ACD', '#FF6600'];
 	data.forEach(function(d) {
 		d.id     =  d.subject;
 		d.color  =  colors[count];
