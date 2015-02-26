@@ -19,9 +19,9 @@ body {
   fill: orange;
 }
 
-.solidArc:hover {
+/*.solidArc:hover {
   fill: #00FF00 ;
-}
+}*/
 
 .solidArc {
     -moz-transition: all 0.3s;
@@ -91,7 +91,7 @@ socket.on('queryFor' + user, function(data){
 
 	var pie = d3.layout.pie().sort(null).value(function(d) { return d.width; });
 	var tip = d3.tip().attr('class', 'd3-tip').offset([0, 0]).html(function(d) {
-		return d.data.id + ": <span style='color:#00FF00'>" + d.data.points + "</span> points";
+		return d.data.id + ": <span style='color:"+d.data.color+"'>" + d.data.points + "</span> points";
 	});
 	var arc = d3.svg.arc().innerRadius(innerRadius).outerRadius(function (d) { 
 		return (radius - innerRadius) * (d.data.accuracy / 100.0) + innerRadius; 
