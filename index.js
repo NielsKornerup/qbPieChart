@@ -15,7 +15,7 @@ secret: "mozillapersona"
 }));
 
 require("express-persona")(app, {
-  audience: "protobowl.herokuapp.com/"
+  audience: "protobowl.herokuapp.com"
 });
 
 app.get('/', function(req, res){
