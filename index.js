@@ -15,7 +15,7 @@ secret: "mozillapersona"
 }));
 
 require("express-persona")(app, {
-  audience: "dry-wildwood-8809.herokuapp.com"
+  audience: "protobowl.herokuapp.com/"
 });
 
 app.get('/', function(req, res){
