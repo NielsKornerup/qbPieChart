@@ -98,7 +98,8 @@ document.querySelector("#login").addEventListener("click", function() {
 
 document.querySelector("#logout").addEventListener("click", function() {
   navigator.id.logout();
-  getChart("Niels");
+  window.location.reload();
+  //getChart("Niels");
 }, false);
 </script>
 </body>
