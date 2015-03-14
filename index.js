@@ -71,7 +71,7 @@ var j = schedule.scheduleJob('* * * * *', function(){
 });
 
 require("express-persona")(app, {
-  audience: "localhost:5000"
+  audience: "protobowl.herokuapp.com"
 });
 
 app.get('/', function(req, res){
