@@ -19,7 +19,7 @@ app.use(express.logger())
 secret: "mozillapersona"
 }));
 
-var j = schedule.scheduleJob('* * * * *', function(){
+function updateUsers(){
 	var buzzes=client.querySync("SELECT * FROM buzz");
 	for (i = 0; i < buzzes.length; i++){
 		var str = "";
@@ -68,7 +68,7 @@ var j = schedule.scheduleJob('* * * * *', function(){
 		}
 	}
 	client.querySync("DELETE FROM buzz;");	
-});
+}
 
 require("express-persona")(app, {
   audience: "protobowl.herokuapp.com"
@@ -85,6 +85,7 @@ io.on('connection', function(io){
 	io.on('getData', function(user){
 		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"'");
 		io.emit('queryFor' + user, result);
+		updateUsers();
 	});
 });
 var port = process.env.PORT||5000;
