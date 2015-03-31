@@ -87,13 +87,14 @@ function updateUsers(){
 				val++;
 				client.querySync("UPDATE users SET "+str+"="+val+" WHERE name = '"+buzzes[i].user+"' AND subject ='"+buzzes[i].category+"'");
 			}
+			client.querySync("UPDATE users SET username ='"+buzzes[i].name+"' WHERE name = '"+buzzes[i].user+"'");
 		}
 	}
 	client.querySync("DELETE FROM buzz;");	
 }
 
 require("express-persona")(app, {
-  audience: "protobowl.herokuapp.com"
+  audience: "localhost:5000"
 });
 
 io.on('connection', function(io){
@@ -109,7 +110,7 @@ io.on('connection', function(io){
 	});
 	io.on('change settings', function(user, changes){
 		if(changes.username!=null&&isName(changes.username)){
-			client.querySync("UPDATE users SET username='"+changes.username+"', setname='t' WHERE name='"+sha1(user)+"';");
+			client.querySync("UPDATE users SET username='"+changes.username+"' WHERE name='"+sha1(user)+"';");
 		}
 		for(var i = 0; i < changes.newSubjects.length; i++){
 			if(isColor(changes.newColors[i])&&isName(changes.newSubjects[i])){

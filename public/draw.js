@@ -1,6 +1,5 @@
 function del(subject, user){
 	var socket = io();
-	console.log("testing");
 	if(confirm('Are you sure that you would like to reset your score in this subject? This change cannot be undone.')){
 		socket.emit('delete data', user, subject);
 	}
@@ -41,7 +40,12 @@ if(data.length==0){
 	document.getElementById('content').innerHTML="There is currently no buzz data associeated with this user. Please spend some time on protobowl, and come back here to get your results!";
 }
 else{
-	document.getElementById('content').innerHTML="";
+	if(user!="sample"){
+		document.getElementById('content').innerHTML="";
+	}
+	else{
+		document.getElementById('content').innerHTML="Protocharts is a program that graphs user preformance by subject on protobowl. It is currently in alpha, and more features will be added in the future. Login is handled by Mozilla Persona, and your data is automatically collected from protobowl. There are currently some issues with collecting data, and this issue is being looked into.";
+	}
 	document.getElementById('playername').innerHTML=data[0].username;
 	var width = 400,
 	height = 400,
