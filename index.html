@@ -19,35 +19,51 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Protocharts</a>
+          <a class="navbar-brand">Protocharts</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right">
             <div class="form-group">
-		  <button type="button" class="btn btn-default" id="login">Login</button>
-		  <button type="button" class="btn btn-default" id="logout">Logout</button>
-          </form>
-        </div>
+		<button type="button" class="btn btn-default" id="login">Login</button>
+		<button type="button" class="btn btn-default" id="logout">Logout</button>
+	    </div>
       </div>
     </nav>
 </head>
 <body>
+<div style="text-align:center">
+	<h1>
+		<div id="welcome">
+			Welcome to Protocharts!
+		</div>
+		<div id="playername">
+		</div>
+	</h1>
+</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-7">
+			<div id="content">
+				Protocharts is a program that graphs user preformance by subject on protobowl. It is currently in alpha, and more features will be added in the future. Login is handled by Mozilla Persona, and your data is automatically collected from protobowl. There are currently some issues with collecting data, and this issue is being looked into.
+			</div>
+			<div id="settings">
+				<h3>
+					Settings
+				</h3>
+				<div class="form-group" id="settings">
+				</div>
+			</div>
+		</div>
+		<div id="chart" class="col-md-5" style="width: 400px;">
+	
+		</div>
+	</div>
+</div>
 <script>
 	document.getElementById("logout").style.display="none";
+	document.getElementById("settings").style.display="none";
 	document.getElementById("login").style.display="initial";
 </script>
-<h1>
-	<div id="welcome">
-		Welcome to Protocharts!
-	</div>
-	<div id="playername">
-	</div>
-</h1>
-<h6>
-	<div id="content">
-
-	</div>
-</h6>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
@@ -63,13 +79,12 @@ navigator.id.watch({
     xhr.addEventListener("loadend", function(e) {
       var data = JSON.parse(this.responseText);
       if (data && data.status === "okay") {
-        console.log("You have been logged in as: " + data.email);
 	  getChart((data.email));
 	  document.getElementById("logout").style.display="initial";
+	  document.getElementById("settings").style.display="initial";
           document.getElementById("login").style.display="none";
 	  document.getElementById("welcome").style.display="none";
 	  document.getElementById("playername").style.display="initial";
-	  document.getElementById('playername').innerHTML=data.email;
       }
     }, false);
 
@@ -81,12 +96,11 @@ navigator.id.watch({
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/persona/logout", true);
     xhr.addEventListener("loadend", function(e) {
-      console.log("You have been logged out");
       document.getElementById("logout").style.display="none";
+      document.getElementById("settings").style.display="none";
       document.getElementById("login").style.display="initial";
       document.getElementById("welcome").style.display="initial";
       document.getElementById("playername").style.display="none";
-      document.getElementById('content').innerHTML="Protocharts collects information about user buzzes from protobowl, and allows you to view your performance by subject. This website is still under development, and more features will be added soon!";
     });
     xhr.send();
   }
@@ -100,7 +114,6 @@ document.querySelector("#login").addEventListener("click", function() {
 document.querySelector("#logout").addEventListener("click", function() {
   navigator.id.logout();
   window.location.reload();
-  //getChart("Niels");
 }, false);
 </script>
 </body>

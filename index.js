@@ -19,6 +19,31 @@ app.use(express.logger())
 secret: "mozillapersona"
 }));
 
+function isColor(str){
+	var col=true;
+	if(str[0]=='#'&&str.length==7){
+		for(var i = 1; i<str.length && col; i++){
+			if(!((str.charCodeAt(i)>=48 && str.charCodeAt(i)<=57)||(str.charCodeAt(i)>=65 && str.charCodeAt(i)<=70)||(str.charCodeAt(i)>=97 && str.charCodeAt(i)<=102))){
+				col=false;
+			}
+		}
+	}
+	else{
+		return false;
+	}
+	return col;
+}
+
+function isName(str){
+	var good=true;
+	for(var i = 0; i<str.length && good; i++){
+		if(!((str.charCodeAt(i)>=48 && str.charCodeAt(i)<=57)||(str.charCodeAt(i)>=65 && str.charCodeAt(i)<=90)||(str.charCodeAt(i)>=97 && str.charCodeAt(i)<=122)||str.charCodeAt(i)==32)){
+			good=false;
+		}
+	}
+	return good;
+}
+
 function updateUsers(){
 	var buzzes=client.querySync("SELECT * FROM buzz");
 	for (i = 0; i < buzzes.length; i++){
@@ -41,9 +66,6 @@ function updateUsers(){
 			str = "negs";
 			str2 = "gets, powers";
 			count = false;
-		}
-		else{
-			console.log("correct: " + buzzes[i].correct +", interrupt: " + buzzes[i].interrupt + ", early: " + buzzes[i].early);
 		}
 		if(count){
 			var data = client.querySync("SELECT * FROM users WHERE name ='"+buzzes[i].user+"' AND subject ='"+buzzes[i].category+"'");
@@ -74,18 +96,28 @@ require("express-persona")(app, {
   audience: "protobowl.herokuapp.com"
 });
 
-app.get('/', function(req, res){
-	var options = {
-		root: __dirname + '/',
-	}
-	res.sendFile('./index.html', options);
-});
-
 io.on('connection', function(io){
 	io.on('getData', function(user){
 		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"'");
 		io.emit('queryFor' + user, result);
 		updateUsers();
+	});
+	io.on('delete data', function(user, subject){
+		client.querySync("DELETE FROM users WHERE name ='"+sha1(user)+"' AND subject='"+subject+"'");
+		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"'");
+		io.emit('queryFor' + user, result);
+	});
+	io.on('change settings', function(user, changes){
+		if(changes.username!=null&&isName(changes.username)){
+			client.querySync("UPDATE users SET username='"+changes.username+"', setname='t' WHERE name='"+sha1(user)+"';");
+		}
+		for(var i = 0; i < changes.newSubjects.length; i++){
+			if(isColor(changes.newColors[i])&&isName(changes.newSubjects[i])){
+				client.querySync("UPDATE users SET color='"+changes.newColors[i]+"' WHERE name='"+sha1(user)+"' AND subject='"+changes.newSubjects[i]+"';");
+			}
+		}
+		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"'");
+		io.emit('queryFor' + user, result);
 	});
 });
 var port = process.env.PORT||5000;
