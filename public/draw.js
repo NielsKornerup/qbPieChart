@@ -34,12 +34,14 @@ function getChart(user){
 var socket = io();
 socket.emit('getData', user);
 socket.on('queryFor' + user, function(data){
-$('#settings').html("<br><div class='row'><div class='col-md-2'> Username </div><input type='text' class='form-control col-md-3 col-md-offset-1' id='username' placeholder='"+data[0].username+"' style='width:35%'></div>");
 d3.selectAll("svg").remove();
 if(data.length==0){
 	document.getElementById('content').innerHTML="There is currently no buzz data associeated with this user. Please spend some time on protobowl, and come back here to get your results!";
+	document.getElementById("settings").style.display="none";
+	document.getElementById('playername').innerHTML=user;
 }
 else{
+	$('#settings').html("<br><div class='row'><div class='col-md-2'> Username </div><input type='text' class='form-control col-md-3 col-md-offset-1' id='username' placeholder='"+data[0].username+"' style='width:35%'></div>");
 	if(user!="sample"){
 		document.getElementById('content').innerHTML="";
 	}

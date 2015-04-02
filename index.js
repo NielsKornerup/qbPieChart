@@ -94,7 +94,7 @@ function updateUsers(){
 }
 
 require("express-persona")(app, {
-  audience: "protobowl.herokuapp.com"
+  audience: "localhost:5000"
 });
 
 io.on('connection', function(io){
