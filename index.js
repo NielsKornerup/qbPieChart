@@ -94,7 +94,7 @@ function updateUsers(){
 }
 
 require("express-persona")(app, {
-  audience: "protobowl.herokuapp.com/"
+  audience: "protobowl.herokuapp.com"
 });
 
 io.on('connection', function(io){
