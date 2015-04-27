@@ -94,18 +94,18 @@ function updateUsers(){
 }
 
 require("express-persona")(app, {
-  audience: "protobowl.herokuapp.com"
+  audience: "localhost:5000"
 });
 
 io.on('connection', function(io){
 	io.on('getData', function(user){
-		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"'");
+		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"' ORDER BY subject");
 		io.emit('queryFor' + user, result);
 		updateUsers();
 	});
 	io.on('delete data', function(user, subject){
 		client.querySync("DELETE FROM users WHERE name ='"+sha1(user)+"' AND subject='"+subject+"'");
-		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"'");
+		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"' ORDER BY subject");
 		io.emit('queryFor' + user, result);
 	});
 	io.on('change settings', function(user, changes){
@@ -117,7 +117,7 @@ io.on('connection', function(io){
 				client.querySync("UPDATE users SET color='"+changes.newColors[i]+"' WHERE name='"+sha1(user)+"' AND subject='"+changes.newSubjects[i]+"';");
 			}
 		}
-		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"'");
+		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"' ORDER BY subject");
 		io.emit('queryFor' + user, result);
 	});
 });
