@@ -87,28 +87,31 @@ function updateUsers(){
 				val++;
 				client.querySync("UPDATE users SET "+str+"="+val+" WHERE name = '"+buzzes[i].user+"' AND subject ='"+buzzes[i].category+"'");
 			}
-			client.querySync("UPDATE users SET username ='"+buzzes[i].name+"' WHERE name = '"+buzzes[i].user+"'");
+			if(isName(buzzes[i].name)){
+				client.querySync("UPDATE users SET username ='"+buzzes[i].name+"' WHERE name = '"+buzzes[i].user+"'");
+			}
 		}
 	}
 	client.querySync("DELETE FROM buzz;");	
 }
 
 require("express-persona")(app, {
-  audience: "protobowl.herokuapp.com"
+  audience: "localhost:5000"
 });
 
 io.on('connection', function(io){
 	io.on('getData', function(user){
+		console.log("user is " + user);
 		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"' ORDER BY subject");
 		io.emit('queryFor' + user, result);
 		updateUsers();
 	});
-	io.on('delete data', function(user, subject){
+	io.on('deleteData', function(user, subject){
 		client.querySync("DELETE FROM users WHERE name ='"+sha1(user)+"' AND subject='"+subject+"'");
 		var result = client.querySync("SELECT * FROM users WHERE name ='"+sha1(user)+"' ORDER BY subject");
 		io.emit('queryFor' + user, result);
 	});
-	io.on('change settings', function(user, changes){
+	io.on('changeSettings', function(user, changes){
 		if(changes.username!=null&&isName(changes.username)){
 			client.querySync("UPDATE users SET username='"+changes.username+"' WHERE name='"+sha1(user)+"';");
 		}
