@@ -1,1 +1,1 @@
-Makes an aster chart from a database
+Makes an aster chart from a database. Project was terminated after people at protobowl failed to fix the bug in pushing user data to the database. Taken offline due to poorly advised security practices (eg. hashing with sha1) that I won't fix because I realized that they existed after protobowl stopped communicating with me. Aster charts are generated correctly and persona works, but this app is not safe in its current state. Sorry for the inconvenience.  
